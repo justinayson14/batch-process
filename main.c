@@ -5,23 +5,27 @@
 // declare global variables including a table structure to hold scheduling information
 // optional: define a function that finds the maximum of two integers
 
-
-
-
+// function declarations
+void getParams();
+void printTable();
+void scheduleFIFO();
+void scheduleSJG();
+void scheduleSRT();
+void delTable();
 
 //***************************************************************
-/* void "PROCEDURE TO PRINT THE CONTENTS OF THE SCHEDULING TABLE"() {
+void printTable() {
 	// declare local variables
 	// print table header 	
 	// for each process 
 		// print the contents (id, arrival time, total_cycles) of each field of the table's index 
 		// if process has been scheduled ("done" field is 1, print other contents (start time, end time, turnaround time) 
 	return;
-} */
+}
 
 
 //*************************************************************
-/* void "PROCEDURE FOR OPTION #1"() {
+void getParams() {
 	// declare local variables 
 	// prompt for total number of processes 	
 	// allocate memory for table to hold process parameters 
@@ -29,11 +33,11 @@
 		// prompt for arrival time, and total cycle time 	
 	// print contents of table 
 	return;		
-}	 */
+}	
 		
 
 //*************************************************************
-/* void "PROCEDURE FOR OPTION #2"() {
+void scheduleFIFO() {
 	// declare (and initilize when appropriate) local variables 
 	// for each process, reset "done" field to 0 
 	// while there are still processes to schedule 	
@@ -44,11 +48,11 @@
 		// update current cycle time and increment number of processes scheduled 
 	// print contents of table 
 	return;		
-}	 */
+}	
 
 
 //*************************************************************
-/* void "PROCEDURE FOR OPTION #3"() {
+void scheduleSJG() {
 	// declare (and initilize when appropriate) local variables 
 	// for each process, reset "done" field to 0 
 	// while there are still processes to schedule 	
@@ -59,11 +63,11 @@
 		// update current cycle time and increment number of processes scheduled 
 	// print contents of table 
 	return;		
-}	 */
+}	
         	
 
 //*************************************************************
-/* void "PROCEDURE FOR OPTION #4"() {
+void scheduleSRT() {
 	// declare (and initilize when appropriate) local variables 
 	// for each process, reset "done", "total_remaining" and "already_started" fields to 0 
 	// while there are still processes to schedule 	
@@ -77,14 +81,14 @@
 		// if remaining time is 0, set done field to 1, increment cycle time and number of scheduled processes
 	// print contents of table 
 	return;		
-}	 */
+}	
         	
 
 //*************************************************************
-/* void "PROCEDURE FOR OPTION #5"() {
+void delTable() {
 	// free the schedule table if not NULL 
 	return;
-} */
+}
 
 
 //*************************************************************
