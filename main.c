@@ -4,6 +4,20 @@
 
 // declare global variables including a table structure to hold scheduling information
 // optional: define a function that finds the maximum of two integers
+struct table
+{
+	int id;
+	int arrival;
+	int total_cpu;
+	int total_remaining;
+	int done;
+	int start_time;
+	int already_started;
+	int end_time;
+	int turnaround_time;
+};
+struct table *processes;
+int numProc;
 
 // function declarations
 void getParams();
@@ -16,22 +30,55 @@ void delTable();
 //***************************************************************
 void printTable() {
 	// declare local variables
-	// print table header 	
+	// print table header
+	printf("\nPID");
+	printf("\tArrival");
+	printf("\tTotal");
+	printf("\tStart");
+	printf("\tEnd");
+	printf("\tTurnaround");
+	printf("\n--------------------------------------------------\n");
 	// for each process 
+	for(int i = 0; i < numProc; i++) {
 		// print the contents (id, arrival time, total_cycles) of each field of the table's index 
+		printf("%d", processes[i].id);
+		printf("\t%d", processes[i].arrival);
+		printf("\t%d", processes[i].total_cpu);
 		// if process has been scheduled ("done" field is 1, print other contents (start time, end time, turnaround time) 
+		if(processes[i].done == 1) {
+			printf("\t%d", processes[i].start_time);
+			printf("\t%d", processes[i].end_time);
+			printf("\t%d", processes[i].turnaround_time);
+		}
+		printf("\n\n");
+	}
 	return;
 }
 
 
 //*************************************************************
 void getParams() {
-	// declare local variables 
-	// prompt for total number of processes 	
-	// allocate memory for table to hold process parameters 
+	// declare local variables
+	// last column holds "if done" field  
+	// prompt for total number of processes
+	printf("Enter total number of processes: ");
+	scanf("%d",&numProc);
+	while (getchar() != '\n');
+	// allocate memory for table to hold process parameters
+	processes = malloc(numProc * sizeof(struct table));
 	// for each process 
-		// prompt for arrival time, and total cycle time 	
+	for(int i = 0; i < numProc; i++) {
+		// prompt for arrival time, and total cycle time
+		processes[i].id = i+1; // id num starts at 1
+		printf("Enter arrival cycle for process %d: ", processes[i].id);
+		scanf("%d", &processes[i].arrival);
+		while(getchar() != '\n');
+		printf("Enter total cycle for process %d: ", processes[i].id);
+		scanf("%d", &processes[i].total_cpu);
+		while(getchar() != '\n');
+	}
 	// print contents of table 
+	printTable();
 	return;		
 }	
 		
@@ -95,41 +142,41 @@ void delTable() {
 int main() {
 	// declare local vars 
     int choice;
-
-    printf("\nBatch scheduling\n");
-    printf("---------------------\n");
-    printf("1) Enter parameters\n");
-    printf("2) Schedule processes with FIFO algorithm\n");
-    printf("3) Schedule processes with SJF algorithm\n");
-    pritnf("4) Schedule processes with SRT algorithm\n");
-    printf("5) Quit and free memory\n");
-	scanf("%d", &choice);
-    while (getchar() != '\n');
-
     // while user has not chosen to quit
     do {
 		// print menu of options 
 		// prompt for menu selection 
+        printf("\nBatch scheduling\n");
+        printf("----------------\n");
+        printf("1) Enter parameters\n");
+        printf("2) Schedule processes with FIFO algorithm\n");
+        printf("3) Schedule processes with SJF algorithm\n");
+        printf("4) Schedule processes with SRT algorithm\n");
+        printf("5) Quit and free memory\n\n");
+		printf("Enter selection: ");
+        scanf("%d", &choice);
+        while (getchar() != '\n');
 		// call appropriate procedure based on choice--use switch statement or series of if, else if, else statements
         switch (choice)
         {
         case 1:
-            printf("Entering parameters...");
+            printf("Entering parameters...\n");
+			getParams();
             break;
         case 2:
-            printf("Scheduleing processes with FIFO...");
+            printf("Scheduleing processes with FIFO...\n");
             break;
         case 3:
-            printf("Scheduling processes with SJF...");
+            printf("Scheduling processes with SJF...\n");
             break;
         case 4:
-            printf("Scheduling processes with SRT...");
+            printf("Scheduling processes with SRT...\n");
             break;
         case 5:
-            printf("Quitting and freeing memory...");
+            printf("Quitting and freeing memory...\n");
             break;
         default:
-            printf("INVALID INPUT. Please try again.");
+            printf("INVALID INPUT. Please try again.\n");
             break;
         }	
 	// while loop 
