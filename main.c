@@ -50,7 +50,7 @@ void printTable() {
 			printf("\t%d", processes[i].end_time);
 			printf("\t%d", processes[i].turnaround_time);
 		}
-		printf("\n\n");
+		printf("\n");
 	}
 	return;
 }
@@ -85,15 +85,38 @@ void getParams() {
 
 //*************************************************************
 void scheduleFIFO() {
-	// declare (and initilize when appropriate) local variables 
+	// declare (and initilize when appropriate) local variables
+	int done = 0;
+	int earliestArrival;
+	int earliestProcess;
+	int currSchedule = 0;
 	// for each process, reset "done" field to 0 
-	// while there are still processes to schedule 	
-		// initilize the earliest arrival time to INT_MAX (largest integer value) 
-		// for each process not yet scheduled 
+	for (int i = 0; i < numProc; i++)
+		processes[i].done = 0;
+	// while there are still processes to schedule
+	while (done < numProc) {
+		/* code */	
+		// initilize the earliest arrival time to INT_MAX (largest integer value)
+		earliestArrival = INT_MAX;
+		// for each process not yet scheduled
+		for (int j = 0; j < numProc; j++) {
 			// check if process has earlier arrival time than current earliest and update 	
-		// set start time, end time, turnaround time, done fields for unscheduled process with earliest arrival time        	
-		// update current cycle time and increment number of processes scheduled 
+			if (processes[j].arrival < earliestArrival && processes[j].done == 0) {
+				earliestArrival = processes[j].arrival;
+				earliestProcess = j;
+			}
+		}
+		// set start time, end time, turnaround time, done fields for unscheduled process with earliest arrival time
+		processes[earliestProcess].start_time = currSchedule;
+		currSchedule += processes[earliestProcess].total_cpu;
+		processes[earliestProcess].end_time =  currSchedule;
+		processes[earliestProcess].turnaround_time = processes[earliestProcess].end_time - processes[earliestProcess].arrival;
+		// update current cycle time and increment number of processes scheduled
+		processes[earliestProcess].done = 1;
+		done++;
+	}
 	// print contents of table 
+	printTable();
 	return;		
 }	
 
@@ -146,7 +169,7 @@ int main() {
     do {
 		// print menu of options 
 		// prompt for menu selection 
-        printf("\nBatch scheduling\n");
+        printf("\n\nBatch scheduling\n");
         printf("----------------\n");
         printf("1) Enter parameters\n");
         printf("2) Schedule processes with FIFO algorithm\n");
@@ -165,6 +188,7 @@ int main() {
             break;
         case 2:
             printf("Scheduleing processes with FIFO...\n");
+			scheduleFIFO();
             break;
         case 3:
             printf("Scheduling processes with SJF...\n");
