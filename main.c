@@ -49,11 +49,11 @@ void printTable() {
 			printf("\t%d", processes[i].start_time);
 			printf("\t%d", processes[i].end_time);
 			printf("\t%d", processes[i].turnaround_time);
-		}
+		} // end if
 		printf("\n");
-	}
+	} // end for
 	return;
-}
+} // end printTable
 
 
 //*************************************************************
@@ -63,6 +63,7 @@ void getParams() {
 	// prompt for total number of processes
 	printf("Enter total number of processes: ");
 	scanf("%d",&numProc);
+	// clear input buffer
 	while (getchar() != '\n');
 	// allocate memory for table to hold process parameters
 	processes = malloc(numProc * sizeof(struct table));
@@ -76,11 +77,11 @@ void getParams() {
 		printf("Enter total cycle for process %d: ", processes[i].id);
 		scanf("%d", &processes[i].total_cpu);
 		while(getchar() != '\n');
-	}
+	} // end for
 	// print contents of table 
 	printTable();
 	return;		
-}	
+} // end getParams
 		
 
 //*************************************************************
@@ -104,36 +105,58 @@ void scheduleFIFO() {
 			if (processes[j].arrival < earliestArrival && processes[j].done == 0) {
 				earliestArrival = processes[j].arrival;
 				earliestProcess = j;
-			}
-		}
+			} // end if
+		} // end for
 		// set start time, end time, turnaround time, done fields for unscheduled process with earliest arrival time
 		processes[earliestProcess].start_time = currSchedule;
 		currSchedule += processes[earliestProcess].total_cpu;
 		processes[earliestProcess].end_time =  currSchedule;
-		processes[earliestProcess].turnaround_time = processes[earliestProcess].end_time - processes[earliestProcess].arrival;
-		// update current cycle time and increment number of processes scheduled
+		processes[earliestProcess].turnaround_time = currSchedule - processes[earliestProcess].arrival;
 		processes[earliestProcess].done = 1;
+		// update current cycle time and increment number of processes scheduled
 		done++;
-	}
+	} // end while
 	// print contents of table 
 	printTable();
 	return;		
-}	
+} // end scheduleFIFO	
 
 
 //*************************************************************
-void scheduleSJG() {
+void scheduleSJF() {
 	// declare (and initilize when appropriate) local variables 
+	int done = 0;
+	int lowestCycle;
+	int lowestProcess;
+	int currSchedule = 0;
 	// for each process, reset "done" field to 0 
-	// while there are still processes to schedule 	
+	for (int i = 0; i < numProc; i++)
+		processes[i].done = 0;
+	// while there are still processes to schedule
+	while (done < numProc) {
 		// initilize the lowest total cycle time to INT_MAX (largest integer value) 
-		// for each process not yet scheduled 
-			// check if process has lower total cycle time than current lowest and has arrival time less than current cycle time and update 	
-		// set start time, end time, turnaround time, done fields for unscheduled process with lowest (and available) total cycle time        	
+		lowestCycle = INT_MAX;
+		// for each process not yet scheduled
+		for (int j = 0; j < numProc; j++) {
+			// check if process has lower total cycle time than current lowest and has arrival time less than current cycle time and update
+			if (processes[j].done == 0 && processes[j].total_cpu < lowestCycle && processes[j].arrival <= currSchedule) {
+				lowestCycle = processes[j].total_cpu;
+				lowestProcess = j;
+			} // end if
+		} // end for
+		// set start time, end time, turnaround time, done fields for unscheduled process with lowest (and available) total cycle time
+		processes[lowestProcess].start_time = currSchedule;
+		currSchedule += processes[lowestProcess].total_cpu;
+		processes[lowestProcess].end_time = currSchedule;
+		processes[lowestProcess].turnaround_time = currSchedule - processes[lowestProcess].arrival; 
+		processes[lowestProcess].done = 1;
 		// update current cycle time and increment number of processes scheduled 
+		done++;
+	} // end while 	
 	// print contents of table 
+	printTable();
 	return;		
-}	
+} // end scheduleSJF
         	
 
 //*************************************************************
@@ -192,6 +215,7 @@ int main() {
             break;
         case 3:
             printf("Scheduling processes with SJF...\n");
+			scheduleSJF();
             break;
         case 4:
             printf("Scheduling processes with SRT...\n");
